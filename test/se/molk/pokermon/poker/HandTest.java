@@ -26,6 +26,7 @@ public class HandTest {
         handNames.add("Sevens Over Kings");
         handNames.add("Sevens Over Fives");
         handNames.add("Twos Over Aces");
+        handNames.add("Flush Ace High, King Kicker");
         handNames.add("Flush Ace High");
         handNames.add("Flush Seven High");
         handNames.add("Straight Ace High");
@@ -52,6 +53,7 @@ public class HandTest {
         hands.put("Sevens Over Kings", new Hand(new Card("H13"), new Card("D7"), new Card("H7"), new Card("S13"), new Card("C7")));
         hands.put("Sevens Over Fives", new Hand(new Card("S7"), new Card("D7"), new Card("H5"), new Card("C7"), new Card("C5")));
         hands.put("Twos Over Aces", new Hand(new Card("H2"), new Card("H14"), new Card("D14"), new Card("C2"), new Card("S2")));
+        hands.put("Flush Ace High, King Kicker", new Hand(new Card("H2"), new Card("H14"), new Card("H12"), new Card("H5"), new Card("H13")));
         hands.put("Flush Ace High", new Hand(new Card("H2"), new Card("H14"), new Card("H12"), new Card("H5"), new Card("H10")));
         hands.put("Flush Seven High", new Hand(new Card("H2"), new Card("H7"), new Card("H5"), new Card("H3"), new Card("H4")));
         hands.put("Straight Ace High", new Hand(new Card("D10"), new Card("H14"), new Card("C12"), new Card("S11"), new Card("H13")));

@@ -1,6 +1,7 @@
 package se.molk.pokermon.server;
 
 import java.net.ServerSocket;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -9,6 +10,7 @@ import java.util.HashMap;
  */
 public class PokerServer extends Thread{
     private ArrayList<ConnectionThread> connections = new ArrayList<>();
+    private HashMap<String, ConnectionThread> players = new HashMap<>();
     private ServerSocket serverSocket;
     private String serverName;
     private boolean running = false;
@@ -43,8 +45,9 @@ public class PokerServer extends Thread{
 
     }
 
-    public void login(ConnectionThread connection) {
-
+    public synchronized void login(ConnectionThread connection) {
+        players.put(connection.getUserName(), connection);
+        connections.remove(connection);
     }
 
     public boolean validateName(String name) {
@@ -52,12 +55,7 @@ public class PokerServer extends Thread{
     }
 
     public boolean nameAvailable(String name) {
-        for (ConnectionThread connection : connections) {
-            if (connection.loggedIn() && name.equals(connection.getUserName())) {
-                return false;
-            }
-        }
-        return true;
+        return !players.keySet().contains(name);
     }
 
     public boolean isFull() {
@@ -65,17 +63,17 @@ public class PokerServer extends Thread{
     }
 
     public void removeConnection(ConnectionThread connection) {
-        connections.remove(connection);
+        if (connection.loggedIn()) {
+            players.remove(connection.getUserName());
+            System.out.println("Removed player " + connection.getUserName());
+        } else {
+            connections.remove(connection);
+            System.out.println("Removed connection");
+        }
     }
 
     public int getPlayerCount() {
-        int count = 0;
-        for (ConnectionThread connection : connections) {
-            if (connection.loggedIn()) {
-                count++;
-            }
-        }
-        return count;
+        return players.size();
     }
 
     public int getMaxPlayers() {
@@ -108,7 +106,7 @@ public class PokerServer extends Thread{
             running = true;
             serverSocket = new ServerSocket(4223);
             while (running) {
-                ConnectionThread connection = new ConnectionThread(this, serverSocket.accept());
+                ConnectionThread connection = new ConnectionThread(serverSocket.accept());
                 connections.add(connection);
                 connection.start();
             }

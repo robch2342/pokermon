@@ -1,0 +1,84 @@
+8 player Texas Hold'em
+
+Default port: 4223
+
+server		client
+
+WELCOME players/max:server_name	Server info.
+
+SERVER FULL			Server is full. GTFO.
+
+LOGIN				Connection established. Waiting for login.
+
+		LOGIN username	Login as username.
+
+LOGIN FAIL reason		Login attempt failed for reason.
+
+TIMEOUT				You did not log in fast enough and was disconnected.
+
+JOINED player			Player joined the game.
+
+SIT				Request desired position.
+
+		SIT position	Sit at position.
+
+SEATED player:position		Seat player at position.
+
+CHIPS player:value		Set chip count for player.
+
+START hand_nr			Deal a new hand.
+
+POT index:value:[player;[player;...]]		Set value and players of the pot with index...
+
+DEALER player			Set the dealer.
+
+BLINDS player:value;player:value;	Set the blinds.
+
+DEAL card:player		Deal a card to a player.
+
+SHOW card:slot			Reveal a card.
+
+		SHOW slot	Reveal one of your cards.
+
+BET min:max:inc			Request a bet.
+
+		BET value	Place a bet.
+
+		FOLD		Fold the hand.
+
+RAISE player:value		Player raised.
+
+CALL player			Player called.
+
+FOLD player			Player folded.
+
+ALLIN player			Player is all in.
+
+HAND player:hand		Player's best hand was...
+
+WON index:player:value;[player:value;...]	Player won the pot with index...
+
+LEFT player			Player left.
+
+		LEAVE		Quit.
+
+MESSAGE sender:message_text	Send a message to a player.
+
+	MESSAGE message_text	Send a message to all players at the table.
+
+
+
+
+Username:	String [a-öA-Ö0-9_-]{5-20}
+
+Card:		Suit (C | D | H | S) and value (2 - 14). S14, H12, etc. X = dolt kort.
+
+Position:	0 - 8		0 = board. 1 - 8 = player positions at table
+
+Slot:		position,index		Card slots. index = 0 - 4 
+
+Reason:		TAKEN | INVALID
+
+Hand:		5 cards
+
+Sender:		Player name or "Server".

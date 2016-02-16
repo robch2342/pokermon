@@ -7,15 +7,13 @@ import java.net.Socket;
  * Created by robin on 2016-02-10.
  */
 public class ConnectionThread extends Thread {
-    private PokerServer server;
     private Socket socket;
     private BufferedReader in;
     private BufferedWriter out;
     private boolean running = false;
     private String userName = null;
 
-    public ConnectionThread(PokerServer server, Socket socket) {
-        this.server = server;
+    public ConnectionThread(Socket socket) {
         this.socket = socket;
     }
 
@@ -66,6 +64,7 @@ public class ConnectionThread extends Thread {
         PokerServer server = PokerServer.getServer();
         send("WELCOME " + server.getPlayerCount() + "/" + server.getMaxPlayers() + ":" + server.getServerName());
         if (server.isFull()) {
+            send("SERVER FULL");
             endThread();
             return;
         }
@@ -74,17 +73,24 @@ public class ConnectionThread extends Thread {
             if (in.ready()) {
                 nextline = in.readLine();
                 if (nextline.matches("LOGIN .+")) {
-                    String name = nextline.substring(7);
+                    String name = nextline.substring(6);
                     synchronized (server) {
-
-                        //userName = server.attemptLogin(name);
-                        break;
+                        if (!server.validateName(name)) {
+                            send("LOGIN FAIL INVALID");
+                        } else if (!server.nameAvailable(name)) {
+                            send("LOGIN FAIL TAKEN");
+                        } else {
+                            userName = name;
+                            server.login(this);
+                            break;
+                        }
                     }
                 }
             }
             Thread.sleep(1000);
         }
         if (!loggedIn()) {
+            send("TIMEOUT");
             endThread();
             return;
         }
