@@ -13,6 +13,13 @@ public class Deck {
         return cards;
     }
 
+    public Card draw() {
+        if (index > 0) {
+            return cards[index--];
+        }
+        return null;
+    }
+
     public Deck() {
         int i = 0;
         for (Card.Suit suit : Card.Suit.values()) {

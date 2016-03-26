@@ -1,13 +1,17 @@
 package se.molk.pokermon.server;
 
+import se.molk.pokermon.poker.Card;
+
 import java.util.Iterator;
 
 /**
  * Created by robin on 2016-02-12.
  */
 public class Table implements Iterable<Player>{
-    Player[] players;
-    int[] seats;
+    private Player[] players;
+    private int[] seats;
+    private Card[] board = new Card[5];
+    private int dealer = -1;
 
     public int size() {
         return seats.length;
@@ -17,6 +21,25 @@ public class Table implements Iterable<Player>{
         return players[i];
     }
 
+    public Player getNextPlayer(int i) {
+        if (i >= seats.length || i < 0) {
+            return null;
+        }
+        int j = i + 1;
+        while (true) {
+            if (j >= seats.length) {
+                j = 0;
+            }
+            if (j == i) {
+                return null;
+            }
+            Player player = getSeat(i);
+            if (player != null) {
+                return player;
+            }
+            j++;
+        }
+    }
     public Table(int capacity) {
         players = new Player[capacity];
         seats = new int[capacity];

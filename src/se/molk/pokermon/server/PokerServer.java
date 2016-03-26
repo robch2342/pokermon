@@ -88,6 +88,10 @@ public class PokerServer extends Thread{
         }
     }
 
+    public ConnectionThread getPlayerConnection(String name) {
+        return players.get(name);
+    }
+
     public String getServerName() {
         return serverName;
     }
@@ -116,5 +120,8 @@ public class PokerServer extends Thread{
         System.out.println("Ending " + getName());
     }
 
+    public void messageTable(String sender, String message) {
+
+    }
 
 }

@@ -96,6 +96,39 @@ public class ConnectionThread extends Thread {
         }
         while ((nextline = in.readLine())!=null) {
             System.out.println(nextline);
+            if (nextline.matches("SIT [0-9]+")) {
+                sit(Integer.valueOf(nextline.substring(4)));
+            } else if (nextline.matches("SHOW [0-9]+")) {
+                revealCard(Integer.valueOf(nextline.substring(5)));
+            } else if (nextline.matches("BET [0-9]+")) {
+                bet(Integer.valueOf(nextline.substring(4)));
+            } else if (nextline.matches("FOLD")) {
+                fold();
+            } else if (nextline.matches("MESSAGE .+")) {
+                messageTable(nextline.substring(4));
+            } else if (nextline.matches("LEAVE")) {
+
+            }
         }
+    }
+
+    private void fold() {
+
+    }
+
+    private void bet(int bet) {
+
+    }
+
+    private void messageTable(String message) {
+        PokerServer.getServer().messageTable(userName, message);
+    }
+
+    private void sit(int pos) {
+
+    }
+
+    private void revealCard(int pos) {
+
     }
 }
